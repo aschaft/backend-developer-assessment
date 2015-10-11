@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ipMusicModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="ipMusicModelStoreContainer">
+          <EntitySet Name="Artist" EntityType="ipMusicModel.Store.Artist" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ArtistAlias" EntityType="ipMusicModel.Store.ArtistAlias" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Country" EntityType="ipMusicModel.Store.Country" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_ArtistAlias_Artist" Association="ipMusicModel.Store.FK_ArtistAlias_Artist">
+            <End Role="Artist" EntitySet="Artist" />
+            <End Role="ArtistAlias" EntitySet="ArtistAlias" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Artist">
+          <Key>
+            <PropertyRef Name="ArtistId" />
+          </Key>
+          <Property Name="ArtistId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ArtistName" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="UniqueId" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="CountryId" Type="nvarchar" Nullable="false" MaxLength="5" />
+        </EntityType>
+        <EntityType Name="ArtistAlias">
+          <Key>
+            <PropertyRef Name="AliasId" />
+          </Key>
+          <Property Name="AliasId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ArtistId" Type="int" Nullable="false" />
+          <Property Name="Alias" Type="nvarchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Country">
+          <Key>
+            <PropertyRef Name="CountryId" />
+          </Key>
+          <Property Name="CountryId" Type="nchar" Nullable="false" MaxLength="10" />
+          <Property Name="CountryName" Type="nvarchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_ArtistAlias_Artist">
+          <End Role="Artist" Type="ipMusicModel.Store.Artist" Multiplicity="1" />
+          <End Role="ArtistAlias" Type="ipMusicModel.Store.ArtistAlias" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Artist">
+              <PropertyRef Name="ArtistId" />
+            </Principal>
+            <Dependent Role="ArtistAlias">
+              <PropertyRef Name="ArtistId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="proc_Artist" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Cmd" Type="nvarchar" Mode="In" />
+          <Parameter Name="ArtistName" Type="nvarchar" Mode="In" />
+          <Parameter Name="UniqueId" Type="nvarchar" Mode="In" />
+          <Parameter Name="CountryId" Type="nvarchar" Mode="In" />
+          <Parameter Name="Alias" Type="nvarchar" Mode="In" />
+          <Parameter Name="AliasId" Type="int" Mode="In" />
+          <Parameter Name="PageNo" Type="int" Mode="In" />
+          <Parameter Name="PageSize" Type="int" Mode="In" />
+          <Parameter Name="ArtistId" Type="int" Mode="InOut" />
+        </Function>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ipMusicModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="ipMusicEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Artists" EntityType="ipMusicModel.Artist" />
+          <EntitySet Name="ArtistAlias" EntityType="ipMusicModel.ArtistAlia" />
+          <EntitySet Name="Countries" EntityType="ipMusicModel.Country" />
+          <FunctionImport Name="proc_Artist">
+            <Parameter Name="Cmd" Mode="In" Type="String" />
+            <Parameter Name="ArtistName" Mode="In" Type="String" />
+            <Parameter Name="UniqueId" Mode="In" Type="String" />
+            <Parameter Name="CountryId" Mode="In" Type="String" />
+            <Parameter Name="Alias" Mode="In" Type="String" />
+            <Parameter Name="AliasId" Mode="In" Type="Int32" />
+            <Parameter Name="PageNo" Mode="In" Type="Int32" />
+            <Parameter Name="PageSize" Mode="In" Type="Int32" />
+            <Parameter Name="ArtistId" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <AssociationSet Name="FK_ArtistAlias_Artist" Association="ipMusicModel.FK_ArtistAlias_Artist">
+            <End Role="Artist" EntitySet="Artists" />
+            <End Role="ArtistAlia" EntitySet="ArtistAlias" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Artist">
+          <Key>
+            <PropertyRef Name="ArtistId" />
+          </Key>
+          <Property Name="ArtistId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ArtistName" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="UniqueId" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="CountryId" Type="String" Nullable="false" MaxLength="5" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="ArtistAlias" Relationship="ipMusicModel.FK_ArtistAlias_Artist" FromRole="Artist" ToRole="ArtistAlia" />
+        </EntityType>
+        <EntityType Name="ArtistAlia">
+          <Key>
+            <PropertyRef Name="AliasId" />
+            <PropertyRef Name="ArtistId" />
+            <PropertyRef Name="Alias" />
+          </Key>
+          <Property Name="AliasId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ArtistId" Type="Int32" Nullable="false" />
+          <Property Name="Alias" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Artist" Relationship="ipMusicModel.FK_ArtistAlias_Artist" FromRole="ArtistAlia" ToRole="Artist" />
+        </EntityType>
+        <EntityType Name="Country">
+          <Key>
+            <PropertyRef Name="CountryId" />
+          </Key>
+          <Property Name="CountryId" Type="String" Nullable="false" MaxLength="10" Unicode="true" FixedLength="true" />
+          <Property Name="CountryName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_ArtistAlias_Artist">
+          <End Type="ipMusicModel.Artist" Role="Artist" Multiplicity="1" />
+          <End Type="ipMusicModel.ArtistAlia" Role="ArtistAlia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Artist">
+              <PropertyRef Name="ArtistId" />
+            </Principal>
+            <Dependent Role="ArtistAlia">
+              <PropertyRef Name="ArtistId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ipMusicModelStoreContainer" CdmEntityContainer="ipMusicEntities">
+          <EntitySetMapping Name="Artists">
+            <EntityTypeMapping TypeName="ipMusicModel.Artist">
+              <MappingFragment StoreEntitySet="Artist">
+                <ScalarProperty Name="ArtistId" ColumnName="ArtistId" />
+                <ScalarProperty Name="ArtistName" ColumnName="ArtistName" />
+                <ScalarProperty Name="UniqueId" ColumnName="UniqueId" />
+                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ArtistAlias">
+            <EntityTypeMapping TypeName="ipMusicModel.ArtistAlia">
+              <MappingFragment StoreEntitySet="ArtistAlias">
+                <ScalarProperty Name="AliasId" ColumnName="AliasId" />
+                <ScalarProperty Name="ArtistId" ColumnName="ArtistId" />
+                <ScalarProperty Name="Alias" ColumnName="Alias" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Countries">
+            <EntityTypeMapping TypeName="ipMusicModel.Country">
+              <MappingFragment StoreEntitySet="Country">
+                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="proc_Artist" FunctionName="ipMusicModel.Store.proc_Artist" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
